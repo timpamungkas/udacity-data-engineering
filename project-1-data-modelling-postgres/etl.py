@@ -6,6 +6,12 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    Process song file located at filepath.
+    The cur is cursor for database transaction (inserting).
+    This will extract, transform, and insert data into table song and artist.
+    """
+    
     # open song file
     df = pd.DataFrame([pd.read_json(filepath, typ='series')])
 
@@ -14,13 +20,17 @@ def process_song_file(cur, filepath):
     cur.execute(song_table_insert, song_data)
     
     # insert artist record
-    df.drop_duplicates(keep = 'first')
     artist_data = df[['artist_id','artist_name', 'artist_location', 'artist_latitude', 'artist_longitude']].values[0].tolist()
     
     cur.execute(artist_table_insert, artist_data)
 
 
 def process_log_file(cur, filepath):
+    """
+    Process log file located at filepath.
+    The cur is cursor for database transaction (inserting).
+    This will extract, transform, and insert data into table time, user and songplay.
+    """
     # open log file
     df = pd.DataFrame(pd.read_json(filepath,  lines=True))
 
@@ -40,7 +50,6 @@ def process_log_file(cur, filepath):
 
     # load user table
     user_df = df[['userId', 'firstName', 'lastName', 'gender', 'level']]
-    user_df.drop_duplicates(subset = 'userId', keep = 'first')
 
     # insert user records
     for i, row in user_df.iterrows():
@@ -64,6 +73,12 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Process all data files.
+    cur: database cursor for transaction (insert to database).
+    filepath: root path for data files, in this case is folder 'data'
+    func: which function to process file (process_song_file or process_log_file)
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -83,6 +98,9 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    Entry point
+    """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 

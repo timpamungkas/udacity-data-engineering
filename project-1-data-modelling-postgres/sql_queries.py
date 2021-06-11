@@ -12,25 +12,25 @@ songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS songplays
 (
   songplay_id serial primary key, 
-  start_time bigint, 
-  user_id bigint, 
-  level varchar, 
+  start_time bigint not null,
+  user_id bigint not null, 
+  level varchar not null, 
   song_id varchar, 
   artist_id varchar, 
-  session_id varchar, 
-  location varchar, 
-  user_agent varchar
+  session_id varchar not null, 
+  location varchar not null, 
+  user_agent varchar not null
 )
 """)
 
 user_table_create = ("""
 CREATE TABLE IF NOT EXISTS users
 (
-  user_id int primary key, 
-  first_name varchar, 
+  user_id int primary key,
+  first_name varchar not null,
   last_name varchar, 
   gender varchar, 
-  level varchar
+  level varchar  not null
 )
 """)
 
@@ -38,10 +38,10 @@ song_table_create = ("""
 CREATE TABLE IF NOT EXISTS songs
 (
   song_id varchar primary key, 
-  title varchar, 
-  artist_id varchar, 
-  year int, 
-  duration numeric
+  title varchar not null, 
+  artist_id varchar not null, 
+  year int not null, 
+  duration numeric not null
 )
 """)
 
@@ -49,7 +49,7 @@ artist_table_create = ("""
 CREATE TABLE IF NOT EXISTS artists
 (
   artist_id varchar primary key, 
-  name varchar, 
+  name varchar not null, 
   location varchar, 
   latitude numeric, 
   longitude numeric
@@ -59,13 +59,14 @@ CREATE TABLE IF NOT EXISTS artists
 time_table_create = ("""
 CREATE TABLE IF NOT EXISTS time
 (
-  start_time timestamp, 
-  hour int, 
-  day int, 
-  week int, 
-  month int, 
-  year int, 
-  weekday int
+  time_id serial primary key,
+  start_time timestamp not null,
+  hour int not null, 
+  day int not null, 
+  week int not null, 
+  month int not null, 
+  year int not null, 
+  weekday int not null
 )
 """)
 
@@ -87,6 +88,11 @@ VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
 user_table_insert = ("""
 INSERT INTO users(user_id, first_name, last_name, gender, level)
 VALUES (%s, %s, %s, %s, %s)
+ON CONFLICT(user_id)
+DO UPDATE SET first_name = excluded.first_name,
+  last_name = excluded.last_name,
+  gender = excluded.gender,
+  level = excluded.level
 """)
 
 song_table_insert = ("""
@@ -97,6 +103,11 @@ VALUES (%s, %s, %s, %s, %s)
 artist_table_insert = ("""
 INSERT INTO artists (artist_id, name, location, latitude, longitude)
 VALUES (%s, %s, %s, %s, %s)
+ON CONFLICT(artist_id) 
+DO UPDATE SET name = excluded.name, 
+  location = excluded.location,
+  latitude = excluded.latitude, 
+  longitude = excluded.longitude
 """)
 
 
