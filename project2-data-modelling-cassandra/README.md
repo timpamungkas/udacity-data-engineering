@@ -1,1 +1,1 @@
-Just run project2.py
+Just run Project_2_Result.ipynb
