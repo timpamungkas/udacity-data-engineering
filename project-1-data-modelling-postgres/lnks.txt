@@ -1,0 +1,14 @@
+Here are some good articles on the database schema:
+
+What is a Database Schema - What are your database diagram needs?
+https://www.lucidchart.com/pages/database-diagram/database-schema
+Instance and schema in DBMS
+https://beginnersbook.com/2015/04/instance-and-schema-in-dbms/
+Database Normalization (Explained in Simple English)
+https://www.essentialsql.com/get-ready-to-learn-sql-database-normalization-explained-in-simple-english/
+
+
+Refer good READMEs on web:
+https://github.com/matiassingers/awesome-readme
+https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project
+https://medium.com/@meakaakka/a-beginners-guide-to-writing-a-kickass-readme-7ac01da88ab3
