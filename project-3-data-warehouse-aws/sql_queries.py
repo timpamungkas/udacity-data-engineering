@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS staging_events(
     method varchar,
     page varchar,
     registration numeric,
-    sessionId bigint not null distkey sortkey,
+    sessionId bigint,
     song varchar,
     status int,
     ts numeric,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS staging_songs(
 
 songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS songplays (
-  songplay_id bigint identity(0,1), 
+  songplay_id bigint identity(0,1) primary key, 
   start_time timestamp not null,
   user_id varchar not null distkey sortkey, 
   level varchar not null, 
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS songplays (
 
 user_table_create = ("""
 CREATE TABLE IF NOT EXISTS users(
-  user_id varchar distkey sortkey,
+  user_id varchar distkey sortkey primary key,
   first_name varchar not null,
   last_name varchar, 
   gender varchar, 
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS users(
 song_table_create = ("""
 CREATE TABLE IF NOT EXISTS songs
 (
-  song_id varchar distkey sortkey, 
+  song_id varchar distkey sortkey primary key, 
   title varchar, 
   artist_id varchar, 
   year int, 
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS songs
 artist_table_create = ("""
 CREATE TABLE IF NOT EXISTS artists
 (
-  artist_id varchar distkey sortkey, 
+  artist_id varchar distkey sortkey primary key, 
   name varchar, 
   location varchar, 
   latitude numeric, 
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS artists
 time_table_create = ("""
 CREATE TABLE IF NOT EXISTS times
 (
-  time_id bigint identity(0,1) distkey sortkey,
+  time_id bigint identity(0,1) distkey sortkey primary key,
   start_time timestamp,
   hour int, 
   day int, 
