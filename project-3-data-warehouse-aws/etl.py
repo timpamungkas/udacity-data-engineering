@@ -16,6 +16,10 @@ def load_staging_tables(cur, conn):
 
 
 def insert_tables(cur, conn):
+    """
+    Inserting data from staging tables (staginge events & songs) into actual table.
+    So the data for actual tables is defined based on query to select from staging tables. 
+    """
     for query in insert_table_queries:
         print("Start inserting {}".format(query))
         cur.execute(query)
@@ -24,6 +28,11 @@ def insert_tables(cur, conn):
 
 
 def main():
+    """
+    Connect to AWS redshift cluster
+    Load data from JSON on S3 into staging tables.
+    Selecting data from staging table, into actual tables. 
+    """
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 

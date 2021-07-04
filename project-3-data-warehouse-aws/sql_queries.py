@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS staging_songs(
 songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS songplays (
   songplay_id bigint identity(0,1), 
-  start_time bigint not null,
+  start_time timestamp not null,
   user_id varchar not null distkey sortkey, 
   level varchar not null, 
   song_id varchar,
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS artists
 """)
 
 time_table_create = ("""
-CREATE TABLE IF NOT EXISTS time
+CREATE TABLE IF NOT EXISTS times
 (
   time_id bigint identity(0,1) distkey sortkey,
   start_time timestamp,
@@ -147,7 +147,7 @@ INSERT INTO songplays(
   location, 
   user_agent)
 SELECT DISTINCT 
-  se.ts,
+  TIMESTAMP 'epoch' + ts/1000 * interval '1 second' AS start_time,
   se.userId,
   se.level,
   ss.song_id,
@@ -211,24 +211,27 @@ FROM staging_songs ss
 """)
 
 time_table_insert = ("""
-INSERT INTO time (
+INSERT INTO times(
   start_time,
-  hour,
-  day,
-  week,
-  month,
-  year,
-  weekday)
-SELECT DISTINCT 
-  se.ts as start_time,
-  EXTRACT(hour FROM start_time),
-  EXTRACT(day FROM start_time),
-  EXTRACT(week FROM start_time),
-  EXTRACT(month FROM start_time),
-  EXTRACT(year FROM start_time),
-  EXTRACT(week FROM start_time)
-FROM staging_events se
-WHERE se.page = 'NextSong'
+  hour, 
+  day, 
+  week, 
+  month, 
+  year, 
+  weekday
+)
+SELECT  ti.start_time,
+        extract(hour from ti.start_time) as hour,
+        extract(day from ti.start_time) as day,
+        extract(week from ti.start_time) as week,
+        extract(month from ti.start_time) as month,
+        extract(year from ti.start_time) as year,
+        extract(weekday from ti.start_time) as weekday
+FROM (
+  SELECT DISTINCT TIMESTAMP 'epoch' + ts / 1000 * interval '1 second' as start_time
+  FROM staging_events
+  WHERE page = 'NextSong'
+) ti
 """)
 
 # QUERY LISTS
