@@ -130,9 +130,8 @@ staging_songs_copy = ("""
     from {} 
     credentials 'aws_iam_role={}' 
     json 'auto';
-""").format(config.get('S3','LOG_DATA'),
-            config.get('IAM_ROLE', 'ARN'),
-            config.get('S3','LOG_JSONPATH'))
+""").format(config.get('S3','SONG_DATA'),
+            config.get('IAM_ROLE', 'ARN'))
 
 # FINAL TABLES
 
